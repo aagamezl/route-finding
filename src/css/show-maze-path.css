@@ -1,0 +1,23 @@
+.maze-table {
+  border-collapse: collapse;
+}
+
+td {
+  width: 10px;
+  height: 10px;
+  text-align: center;
+  border: 1px solid #ccc;
+  font-size: 8px;
+  font-family: fantasy;
+}
+
+.path-cell {
+  background-color: #FF0000;
+  color: white;
+  cursor: pointer;
+}
+
+.solid-cell {
+  background-color: #000;
+  cursor: not-allowed;
+}

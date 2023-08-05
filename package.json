@@ -1,0 +1,25 @@
+{
+  "name": "route-finding",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "Álvaro José Agámez Licha",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aagamezl/route-finding.git"
+  },
+  "bugs": {
+    "url": "https://github.com/aagamezl/route-finding/issues"
+  },
+  "homepage": "https://github.com/aagamezl/route-finding#readme",
+  "devDependencies": {
+    "vite": "^4.4.8"
+  }
+}

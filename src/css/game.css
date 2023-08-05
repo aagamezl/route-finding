@@ -1,0 +1,14 @@
+.path-display {
+  font-size: 1em;
+}
+
+.settings {
+  height: 3vh;
+  margin-bottom: 1.5rem;
+  margin-left: 3vw;
+  margin-top: 0.5vh;
+}
+
+canvas {
+  border: 1px solid #000;
+}

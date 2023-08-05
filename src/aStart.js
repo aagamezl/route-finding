@@ -1,104 +1,128 @@
-function createNode(x, y, parent, g, h) {
-  return { x, y, parent, g, h };
+// Function to calculate the Manhattan distance heuristic
+const calculateDistance = (start, end) => {
+  return Math.abs(start.x - end.x) + Math.abs(start.y - end.y)
 }
 
-function calculateDistance(nodeA, nodeB) {
-  return Math.abs(nodeA.x - nodeB.x) + Math.abs(nodeA.y - nodeB.y);
+const createNode = (x, y, parent, g, h) => {
+  return { x, y, parent, g, h }
 }
 
-function findPath(map, start, end) {
-  const openList = [];
-  const closedList = [];
+// Function to check if a position is valid (inside the map and not a solid block)
+const isValid = (map, x, y) => {
+  return x >= 0 && x < map[0].length && y >= 0 && y < map.length && map[y][x] !== 1
+}
+
+// Function to check if diagonal movement is valid
+const isDiagonalValid = (map, currentNode, neighborX, neighborY) => {
+  const dx = neighborX - currentNode.x
+  const dy = neighborY - currentNode.y
+
+  return isValid(map, neighborX, neighborY) &&
+    isValid(map, currentNode.x + dx, currentNode.y) &&
+    isValid(map, currentNode.x, currentNode.y + dy)
+}
+
+// Function to check if a node is in the list and return its index
+const isInList = (list, node) => {
+  return list.findIndex(n => n.x === node.x && n.y === node.y)
+}
+
+/**
+ *
+ * @param {import('./Maze').Tile[]} map
+ * @param {import('./Maze').Tile} start
+ * @param {import('./Maze').Tile} end
+ * @returns {import('./Maze').Tile[]}
+ */
+export const findPath = (map, start, end) => {
+  const openList = []
+  const closedList = []
   const directions = [
-    { x: -1, y: -1 }, { x: 0, y: -1 }, { x: 1, y: -1 },
-    { x: -1, y: 0 }, { x: 1, y: 0 },
-    { x: -1, y: 1 }, { x: 0, y: 1 }, { x: 1, y: 1 }
-  ];
-
-  // Function to check if a position is valid (inside the map and not a solid block)
-  function isValid(x, y) {
-    return x >= 0 && x < map[0].length && y >= 0 && y < map.length && map[y][x] !== 1;
-  }
-
-  // Function to check if diagonal movement is valid
-  function isDiagonalValid(currentNode, neighborX, neighborY) {
-    const dx = neighborX - currentNode.x;
-    const dy = neighborY - currentNode.y;
-    return isValid(neighborX, neighborY) &&
-      isValid(currentNode.x + dx, currentNode.y) &&
-      isValid(currentNode.x, currentNode.y + dy);
-  }
-
-  // Function to check if a node is in the list and return its index
-  function isInList(list, node) {
-    return list.findIndex(n => n.x === node.x && n.y === node.y);
-  }
+    { x: -1, y: -1 },
+    { x: 0, y: -1 },
+    { x: 1, y: -1 },
+    { x: -1, y: 0 },
+    { x: 1, y: 0 },
+    { x: -1, y: 1 },
+    { x: 0, y: 1 },
+    { x: 1, y: 1 }
+  ]
 
   // Add the start node to the open list
-  openList.push(createNode(start.x, start.y, null, 0, calculateDistance(start, end)));
+  openList.push(createNode(start.x, start.y, null, 0, calculateDistance(start, end)))
 
   while (openList.length > 0) {
     // Find the node with the lowest f value in the open list
-    let currentIdx = 0;
+    let currentIdx = 0
+
     for (let i = 1; i < openList.length; i++) {
       if (openList[i].g + openList[i].h < openList[currentIdx].g + openList[currentIdx].h) {
-        currentIdx = i;
+        currentIdx = i
       }
     }
 
-    const currentNode = openList[currentIdx];
+    const currentNode = openList[currentIdx]
 
     // Move the current node from the open list to the closed list
-    openList.splice(currentIdx, 1);
-    closedList.push(currentNode);
+    openList.splice(currentIdx, 1)
+    closedList.push(currentNode)
 
     // If the destination is reached, reconstruct the path and return it
     if (currentNode.x === end.x && currentNode.y === end.y) {
-      const path = [];
-      let current = currentNode;
+      const path = []
+      let current = currentNode
+
       while (current !== null) {
-        path.push({ x: current.x, y: current.y });
-        current = current.parent;
+        path.push({ x: current.x, y: current.y })
+        current = current.parent
       }
-      return path.reverse();
+
+      return path.reverse()
     }
 
     // Generate neighbors and calculate their g and h values
     for (const direction of directions) {
-      const neighborX = currentNode.x + direction.x;
-      const neighborY = currentNode.y + direction.y;
+      const neighborX = currentNode.x + direction.x
+      const neighborY = currentNode.y + direction.y
 
       if (direction.x !== 0 && direction.y !== 0) {
         // Diagonal movement
-        if (!isDiagonalValid(currentNode, neighborX, neighborY)) continue;
+        if (!isDiagonalValid(map, currentNode, neighborX, neighborY)) {
+          continue
+        }
       } else {
         // Non-diagonal movement
-        if (!isValid(neighborX, neighborY)) continue;
+        if (!isValid(map, neighborX, neighborY)) {
+          continue
+        }
       }
 
-      const g = currentNode.g + (direction.x !== 0 && direction.y !== 0 ? 1.4 : 1);
-      const h = calculateDistance({ x: neighborX, y: neighborY }, end);
-      const neighbor = createNode(neighborX, neighborY, currentNode, g, h);
+      const g = currentNode.g + (direction.x !== 0 && direction.y !== 0 ? 1.4 : 1)
+      const h = calculateDistance({ x: neighborX, y: neighborY }, end)
+      const neighbor = createNode(neighborX, neighborY, currentNode, g, h)
 
       // Check if the neighbor is in the closed list and ignore it
-      if (isInList(closedList, neighbor) !== -1) continue;
+      if (isInList(closedList, neighbor) !== -1) {
+        continue
+      }
 
-      const existingIdx = isInList(openList, neighbor);
+      const existingIdx = isInList(openList, neighbor)
+
       if (existingIdx !== -1) {
         // If the neighbor is already in the open list and the new g value is lower, update it
         if (openList[existingIdx].g > neighbor.g) {
-          openList[existingIdx].g = neighbor.g;
-          openList[existingIdx].parent = currentNode;
+          openList[existingIdx].g = neighbor.g
+          openList[existingIdx].parent = currentNode
         }
       } else {
         // Add the neighbor to the open list
-        openList.push(neighbor);
+        openList.push(neighbor)
       }
     }
   }
 
   // No path found
-  return null;
+  return null
 }
 
 // function findPath(map, start, end) {

@@ -1,101 +1,175 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+  <head>
+    <title>RPG Game with A* Pathfinding</title>
 
-<head>
-  <title>RPG Game with A* Pathfinding</title>
-  <style>
-    canvas {
-      border: 1px solid #000;
-      margin-left: 0.5vw;
-    }
-  </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"></script>
 
-  <link rel="stylesheet" href="css/game.css">
-</head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<body>
-  <div class="container-sm settings">
-    <form>
-      <!-- <label for="gridControl" class="form-control">
-        <input type="checkbox" name="gridControl" id="gridControl">
-        Show/Hide Grid
-      </label>
+    <!-- <link rel="stylesheet" href="css/maze-path-table.css">
+    <link rel="stylesheet" href="css/game.css"> -->
+  </head>
 
-      <label for="openAreas" class="form-control">
-        <input type="number" id="openAreas" />
+  <body>
+    <div class="container-fluid settings1">
+      <!-- <button class="btn btn-primary"><i class="fa fa-bars"></i></button> -->
+      <!-- Button trigger modal -->
+      <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mazeConfiguration">
+        Config
+      </button>
 
-        Open Areas:
-      </label> -->
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mazePath">
+        Show Path
+      </button>
 
-      <!-- <div class="form-check form-check-inline form-switch">
-        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
-        <label class="form-check-label" for="flexSwitchCheckDefault">Show/Hide Grid</label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input class="form-control" type="number" placeholder="Default input" aria-label="default input example">
-        <label class="form-check-label" for="flexCheckChecked">
-          Open Areas
-        </label>
+      <div class="form-check form-switch form-check-inline">
+        <input class="form-check-input" type="checkbox" role="switch" id="gridControl">
+        <label class="form-check-label" for="gridControl">Show Grid</label>
       </div> -->
+    </div>
 
-      <div class="row">
-        <div class="col-auto form-check form-check-inline form-switch">
-          <input class="form-check-input" type="checkbox" role="switch" id="gridControl">
-          <label class="form-check-label" for="gridControl">Show/Hide Grid</label>
-        </div>
+    <!-- Config Modal -->
+    <div class="modal fade" id="mazeConfiguration" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="mazeConfigurationLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="mazeConfigurationLabel">Maze Configuration</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form class="row g-3">
+              <div class="col-md-4">
+                <label for="rowsNumber" class="form-label">Rows</label>
+                <input type="number" id="rowsNumber" value="67" min="20" class="form-control" aria-label="Rows Number">
+              </div>
+              <div class="col-md-4">
+                <label for="columnsNumber" class="form-label">Columns</label>
+                <input type="number" id="columnsNumber" value="128" min="20" class="form-control"
+                  aria-label="Columns Number">
+              </div>
+              <div class="col-md-4">
+                <label for="tileSize" class="form-label">Tile Size</label>
+                <input type="number" id="tileSize" value="24" min="16" max="64" class="form-control"
+                  aria-label="Tile Size">
+              </div>
 
-        <div class="col-sm-1">
-          <label for="rowsNumber" class="form-label">Rows</label>
-        </div>
-        
-        <div class="col-sm-1">
-          <input type="number" id="rowsNumber" value="20" min="20" class="form-control" aria-label="Rows Number">
-        </div>
 
-        <div class="col-sm-1">
-          <label for="columnsNumber" class="form-label">Columns</label>
-        </div>
-
-        <div class="col-sm-1">
-          <input type="number" id="columnsNumber" value="20" min="20" class="form-control" aria-label="Columns Number">
-        </div>
-        
-        <div class="col-sm-1">
-          <label for="characterSpeed" class="form-label">Speed</label>
-        </div>
-
-        <div class="col-sm-1">
-          <input type="number" id="characterSpeed" value="10" min="10" class="form-control" aria-label="Open areas">
-        </div>
-        
-        <div class="col-sm-1">
-          <label for="openAreas" class="form-label">Open Areas</label>
-        </div>
-
-        <div class="col-sm-1">
-          <input type="number" id="openAreas" value="10" min="10" class="form-control" aria-label="Open areas">
-        </div>
-
-        <div class="col-auto">
-          <button type="button" class="btn btn-primary" id="generate">Generate</button>
+              <div class="col-md-4">
+                <label for="characterSpeed" class="form-label">Character Speed</label>
+                <input type="number" id="characterSpeed" value="10" min="10" class="form-control"
+                  aria-label="Character Speed">
+              </div>
+              <div class="col-md-4">
+                <label for="openAreas" class="form-label">Open Areas</label>
+                <input type="number" id="openAreas" value="400" min="100" class="form-control" aria-label="Open Areas">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Generate</button>
+          </div>
         </div>
       </div>
-    </form>
-  </div>
+    </div>
 
-  <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <!-- Maze Path Modal -->
+    <div class="modal modal-lg fade" id="mazePath" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="mazePathLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="mazePathLabel">Maze Path</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="path-display">
+              <div class="path-stats"></div>
+              <!-- <pre class="path-structure"></pre> -->
+              <table class="maze-path"></table>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-  <div class="path-display">
-    <pre class="path-structure"></pre>
-  </div>
+    <!-- <div class="container-sm settings">
+      <form>
+        <div class="row">
+          <div class="col-auto form-check form-check-inline form-switch">
+            <input class="form-check-input" type="checkbox" role="switch" id="gridControl">
+            <label class="form-check-label" for="gridControl">Show/Hide Grid</label>
+          </div>
 
-  <!-- <script src="src/generateMap.js"></script> -->
-  <script src="src/generateMaze.js"></script>
-  <script src="src/aStart.js"></script>
-  <script src="src/game.js"></script>
-</body>
+          <div class="col-sm-1">
+            <label for="rowsNumber" class="form-label">Rows</label>
+          </div>
 
+          <div class="col-sm-1">
+            <input type="number" id="rowsNumber" value="20" min="20" class="form-control" aria-label="Rows Number">
+          </div>
+
+          <div class="col-sm-1">
+            <label for="columnsNumber" class="form-label">Columns</label>
+          </div>
+
+          <div class="col-sm-1">
+            <input type="number" id="columnsNumber" value="20" min="20" class="form-control" aria-label="Columns Number">
+          </div>
+
+          <div class="col-sm-1">
+            <label for="tileSize" class="form-label">Tile Size</label>
+          </div>
+
+          <div class="col-sm-1">
+            <input type="number" id="tileSize" value="20" min="20" max="64" class="form-control" aria-label="Tile Size">
+          </div>
+
+          <div class="col-sm-1">
+            <label for="characterSpeed" class="form-label">Speed</label>
+          </div>
+
+          <div class="col-sm-1">
+            <input type="number" id="characterSpeed" value="10" min="10" class="form-control" aria-label="Open areas">
+          </div>
+
+          <div class="col-sm-1">
+            <label for="openAreas" class="form-label">Open Areas</label>
+          </div>
+
+          <div class="col-sm-1">
+            <input type="number" id="openAreas" value="10" min="10" class="form-control" aria-label="Open areas">
+          </div>
+
+          <div class="col-auto">
+            <button type="button" class="btn btn-primary" id="generate">Generate</button>
+          </div>
+        </div>
+      </form>
+    </div> -->
+
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+    <!-- <div class="path-display">
+      <pre class="path-structure"></pre>
+    </div> -->
+
+    <!-- <script src="src/generateMap.js"></script> -->
+    <!-- <script src="src/maze.js"></script>
+    <script src="src/showMazePath.js"></script>
+    <script src="src/aStart.js"></script>
+    <script src="src/game.js"></script> -->
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
 </html>
