@@ -28,6 +28,8 @@ import './css/game.css'
 import { Agent } from './Agent.js'
 import { Maze } from './Maze.js'
 import { Game } from './Game.js'
+import { getMaxRowsAndColumns } from './utils/getMaxRowsAndColumns.js'
+import { showGrid } from './utils/showGrid.js'
 
 const characterSpeedField = document.querySelector('#characterSpeed')
 const columnsField = document.querySelector('#columnsNumber')
@@ -37,6 +39,30 @@ const tileSizeField = document.querySelector('#tileSize')
 
 /** @type HTMLCanvasElement */
 const canvas = document.querySelector('#gameCanvas')
+
+const tileSize = 24 // You can change this value to your desired tile size
+const screenWidth = window.innerWidth
+const screenHeight = window.innerHeight
+const { maxRows, maxColumns } = getMaxRowsAndColumns(screenWidth, screenHeight, tileSize)
+
+rowsField.value = maxRows - 1
+columnsField.value = maxColumns
+
+document.querySelector('#showGrid').addEventListener('click', (event) => {
+  if (event.target.checked) {
+    const gridCanvas = showGrid(canvas, {
+      color: '#ccc', // Grid color
+      lineWidth: 1, // Grid line width
+      tileSize
+    })
+
+    document.body.appendChild(gridCanvas)
+
+    return
+  }
+
+  hideGrid(canvas)
+})
 
 const agent = new Agent({
   color: '#f00',
@@ -56,18 +82,6 @@ const maze = new Maze({
 const game = new Game(maze, agent, canvas)
 game.run()
 
-function getMaxRowsAndColumns(screenWidth, screenHeight, tileSize) {
-  const maxRows = Math.floor(screenHeight / tileSize);
-  const maxColumns = Math.floor(screenWidth / tileSize);
-  return { maxRows, maxColumns };
-}
-
-const screenWidth = window.innerWidth;
-const screenHeight = window.innerHeight;
-
-const tileSize = 24; // You can change this value to your desired tile size
-const { maxRows, maxColumns } = getMaxRowsAndColumns(screenWidth, screenHeight, tileSize);
-
 // Now you have the maximum number of rows and columns you can create
-console.log("Max Rows:", maxRows);
-console.log("Max Columns:", maxColumns);
+console.log("Max Rows:", maxRows)
+console.log("Max Columns:", maxColumns)
