@@ -18,52 +18,52 @@ export class Game {
   run() {
     this.#setCanvas()
 
-    const maze = this.maze.generate()
+    // const maze = this.maze.generate()
 
     this.maze.draw(this.canvas)
     this.agent.draw(this.canvas)
 
-    this.canvas.addEventListener('click', (event) => {
-      const rect = this.canvas.getBoundingClientRect()
-      const mouseX = event.clientX - rect.left
-      const mouseY = event.clientY - rect.top
+    // this.canvas.addEventListener('click', (event) => {
+    //   const rect = this.canvas.getBoundingClientRect()
+    //   const mouseX = event.clientX - rect.left
+    //   const mouseY = event.clientY - rect.top
 
-      const mapX = Math.floor(mouseX / this.maze.config.tileSize)
-      const mapY = Math.floor(mouseY / this.maze.config.tileSize)
+    //   const mapX = Math.floor(mouseX / this.maze.config.tileSize)
+    //   const mapY = Math.floor(mouseY / this.maze.config.tileSize)
 
-      this.path = findPath(maze, this.agent.position, { x: mapX, y: mapY })
+    //   this.path = findPath(maze, this.agent.position, { x: mapX, y: mapY })
 
-      // const animate = (timestamp) => {
-      //   this.maze.draw(this.canvas)
-      //   // this.agent.animate(this.canvas, path, this.maze.draw.bind(this.maze))
-      //   this.agent.animate(this.canvas, path, timestamp)
+    //   // const animate = (timestamp) => {
+    //   //   this.maze.draw(this.canvas)
+    //   //   // this.agent.animate(this.canvas, path, this.maze.draw.bind(this.maze))
+    //   //   this.agent.animate(this.canvas, path, timestamp)
 
-      //   requestAnimationFrame(animate)
-      // }
+    //   //   requestAnimationFrame(animate)
+    //   // }
 
-      if (this.path) {
-        document.querySelector('.path-stats').innerHTML = `Number of Steps: ${this.path.length}`
+    //   if (this.path) {
+    //     document.querySelector('.path-stats').innerHTML = `Number of Steps: ${this.path.length}`
 
-        this.agent.currentStep = 0
+    //     this.agent.currentStep = 0
 
-        this.#animate(performance.now())
+    //     this.#animate(performance.now())
 
-        this.#showMazePath(
-          document.querySelector('.maze-path'),
-          gameMaze,
-          path,
-          config.rows,
-          config.columns
-        )
+    //     this.#showMazePath(
+    //       document.querySelector('.maze-path'),
+    //       gameMaze,
+    //       path,
+    //       config.rows,
+    //       config.columns
+    //     )
 
-      } else {
-        console.info('No path found!')
-        cancelAnimationFrame(this.requestAnimation)
-      }
-    })
+    //   } else {
+    //     console.info('No path found!')
+    //     cancelAnimationFrame(this.requestAnimation)
+    //   }
+    // })
   }
 
-  #animate (timestamp) {
+  animate (timestamp) {
     const ctx = this.canvas.getContext('2d')
 
     this.maze.draw(this.canvas, this.maze.config.tileSize)
@@ -78,12 +78,14 @@ export class Game {
     //   return
     // }
 
+    // this.agent.animate(this.canvas, timestamp, this.path)
     this.agent.animate(timestamp, this.path)
-    this.agent.draw(this.canvas, this.maze.config.tileSize)
+    // this.agent.draw(this.canvas, this.maze.config.tileSize)
+    this.agent.draw(this.canvas)
 
     // Continue the animation loop until the path is completed
     if (this.agent.position.x !== this.path[this.path.length - 1].x || this.agent.position.y !== this.path[this.path.length - 1].y) {
-      this.requestAnimation = requestAnimationFrame((timestamp) => this.#animate(timestamp))
+      this.requestAnimation = requestAnimationFrame((timestamp) => this.animate(timestamp))
     } else {
       cancelAnimationFrame(this.requestAnimation)
     }
@@ -111,7 +113,7 @@ export class Game {
    * @param {number} columns
    * @returns {void}
    */
-  #showMazePath (mazeTable, maze, path, rows, columns) {
+  showMazePath (mazeTable, maze, path, rows, columns) {
     // Clear all previous table cells
     while (mazeTable.firstChild) {
       mazeTable.removeChild(mazeTable.lastChild)

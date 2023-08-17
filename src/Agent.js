@@ -19,7 +19,13 @@ export class Agent {
   }
 
   // animate (canvas, path, drawMaze) {
-  animate (timestamp, path) {
+  /**
+   * Animates the agent's movement on the specified canvas along the given path.
+   * @param {HTMLCanvasElement} canvas - The canvas element on which to animate the agent.
+   * @param {number} timestamp - The current timestamp from the requestAnimationFrame callback.
+   * @param {import("./Maze").Tile[]} path - An array of path points for the agent to follow.
+   */
+  animate (/* canvas,  */timestamp, path) {
     // const ctx = canvas.getContext('2d')
     // const moveSpeed = 30 // Adjust the speed of movement here (lower value for slower movement)
     // let currentStep = 0
@@ -72,6 +78,7 @@ export class Agent {
     // }
 
     // animate(performance.now())
+    // this.draw(canvas, this.tileSize)
   }
 
   // animate (timestamp, path) {

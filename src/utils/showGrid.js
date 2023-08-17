@@ -1,3 +1,5 @@
+import { getMapPositionHandler } from './getMapPositionHandler.js'
+
 /**
  * Renders a grid on the specified canvas with the given visual attributes.
  * @param {HTMLCanvasElement} canvas - The canvas element on which to render the grid.

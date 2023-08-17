@@ -18,7 +18,8 @@ export class Maze {
    */
   constructor (config) {
     this.config = config
-    this.maze = []
+    // this.maze = []
+    this.maze = this.generate()
   }
 
   /**
@@ -87,7 +88,7 @@ export class Maze {
       y: Math.random() < 0.5 ? 0 : this.config.rows - 1
     }
 
-    console.log(startPoint)
+    // console.log(startPoint)
 
     // Start carving the maze from the specified starting point
     // this.#carvePath(this.config.startPoint.x, this.config.startPoint.y)
