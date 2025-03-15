@@ -1,29 +1,5 @@
-// import './style.css'
-// import javascriptLogo from './javascript.svg'
-// import viteLogo from '/vite.svg'
-// import { setupCounter } from './route-finding/counter.js'
-
-// document.querySelector('#app').innerHTML = `
-//   <div>
-//     <a href="https://vitejs.dev" target="_blank">
-//       <img src="${viteLogo}" class="logo" alt="Vite logo" />
-//     </a>
-//     <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-//       <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-//     </a>
-//     <h1>Hello Vite!</h1>
-//     <div class="card">
-//       <button id="counter" type="button"></button>
-//     </div>
-//     <p class="read-the-docs">
-//       Click on the Vite logo to learn more
-//     </p>
-//   </div>
-// `
-
-// setupCounter(document.querySelector('#counter'))
-
 import './css/game.css'
+import './css/show-maze-path.css'
 
 import { Agent } from './Agent.js'
 import { Maze } from './Maze.js'
@@ -32,17 +8,19 @@ import { getMaxRowsAndColumns } from './utils/getMaxRowsAndColumns.js'
 import { showGrid } from './utils/showGrid.js'
 import { hideGrid } from './utils/hideGrid.js'
 import { findPath } from './aStart.js'
+import { showMazePath } from './utils/showMazePath.js'
 
-const characterSpeedField = document.querySelector('#characterSpeed')
 const columnsField = document.querySelector('#columnsNumber')
-const openAreasField = document.querySelector('#openAreas')
 const rowsField = document.querySelector('#rowsNumber')
 const tileSizeField = document.querySelector('#tileSize')
+const openAreasField = document.querySelector('#openAreas')
+const characterSpeedField = document.querySelector('#characterSpeed')
+const characterColorField = document.querySelector('#characterColor')
 
 /** @type HTMLCanvasElement */
 const canvas = document.querySelector('#gameCanvas')
+const mazePath = document.querySelector('.maze-path')
 
-const tileSize = Number(tileSizeField.value) // You can change this value to your desired tile size
 const screenWidth = window.innerWidth
 const screenHeight = window.innerHeight
 const { maxRows, maxColumns } = getMaxRowsAndColumns(
@@ -57,68 +35,50 @@ openAreasField.value = Math.ceil((maxRows * maxColumns) / 10)
 rowsField.value = maxRows - 1
 columnsField.value = maxColumns
 
-const agent = new Agent({
-  color: '#f00',
-  speed: Number(characterSpeedField.value),
-  tileSize,
-  position: { x: 1, y: 1 }
+const maze = new Maze({
+  columns: Number.parseInt(columnsField.value, 10) - 1,
+  rows: Number.parseInt(rowsField.value, 10) - 1,
+  tileSize: Number.parseInt(tileSizeField.value, 10), // Size of each map tile in pixels
+  openAreas: Number.parseInt(openAreasField.value, 10)
 })
 
-const maze = new Maze({
-  columns: Number(columnsField.value) - 1,
-  rows: Number(rowsField.value) - 1,
-  tileSize, // Size of each map tile in pixels
-  openAreas: Number(openAreasField.value),
-  startPoint: agent.position
+const agent = new Agent({
+  color: characterColorField.value,
+  speed: Number.parseInt(characterSpeedField.value, 10),
+  tileSize: Number.parseInt(tileSizeField.value, 10),
+  position: maze.findFreePosition(maze.getMap())
 })
 
 const game = new Game(maze, agent, canvas)
 game.run()
-
-// const generatedMaze = maze.generate()
-const generatedMaze = maze.maze
-
-// Now you have the maximum number of rows and columns you can create
-// console.log("Max Rows:", maxRows)
-// console.log("Max Columns:", maxColumns)
 
 const gameEvent = (event) => {
   const rect = canvas.getBoundingClientRect()
   const mouseX = event.clientX - rect.left
   const mouseY = event.clientY - rect.top
 
-  const mapX = Math.floor(mouseX / maze.config.tileSize)
-  const mapY = Math.floor(mouseY / maze.config.tileSize)
+  const mapX = Math.floor(mouseX / maze.getTileSize())
+  const mapY = Math.floor(mouseY / maze.getTileSize())
 
-  const path = findPath(generatedMaze, agent.position, { x: mapX, y: mapY })
-
-  // const animate = (timestamp) => {
-  //   this.maze.draw(this.canvas)
-  //   // this.agent.animate(this.canvas, path, this.maze.draw.bind(this.maze))
-  //   this.agent.animate(this.canvas, path, timestamp)
-
-  //   requestAnimationFrame(animate)
-  // }
+  const path = findPath(maze.getMap(), agent.getPosition(), { x: mapX, y: mapY })
 
   if (path) {
     document.querySelector('.path-stats').innerHTML = `Number of Steps: ${path.length}`
 
-    agent.currentStep = 0
+    agent.setCurrentStep(0)
 
-    game.path = path
+    game.setPath(path)
     game.animate(performance.now())
 
-    game.showMazePath(
-      document.querySelector('.maze-path'),
-      gameMaze,
-      path,
-      config.rows,
-      config.columns
+    showMazePath(
+      mazePath,
+      maze.getMap(),
+      path
     )
   } else {
     console.info('No path found!')
 
-    cancelAnimationFrame(game.requestAnimation)
+    window.cancelAnimationFrame(game.requestAnimation)
   }
 }
 
@@ -129,7 +89,7 @@ document.querySelector('#showGrid').addEventListener('click', (event) => {
     const gridCanvas = showGrid(canvas, {
       color: '#ccc', // Grid color
       lineWidth: 1, // Grid line width
-      tileSize
+      tileSize: Number(tileSizeField.value)
     })
 
     gridCanvas.addEventListener('click', gameEvent)
@@ -140,4 +100,19 @@ document.querySelector('#showGrid').addEventListener('click', (event) => {
   }
 
   hideGrid(document.querySelector('#grid-canvas'))
+})
+
+document.querySelector('#mazeSettings .btn-primary').addEventListener('click', (event) => {
+  // maze.draw(canvas)
+  maze.setTileSize(Number(tileSizeField.value))
+  maze.setColumns(Number(columnsField.value))
+  maze.setRows(Number(rowsField.value))
+  maze.setOpenAreas(Number(openAreasField.value))
+
+  agent.setColor(characterColorField.value)
+  agent.setSpeed(Number(characterSpeedField.value))
+  agent.setTileSize(Number(tileSizeField.value))
+
+  maze.generate()
+  game.run()
 })

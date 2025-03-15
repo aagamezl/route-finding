@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "vite",
     "build": "vite build",
+    "dev": "vite",
+    "lint": "standard --verbose | snazzy",
+    "lint:fix": "standard --fix",
     "preview": "vite preview"
   },
   "keywords": [],
@@ -20,6 +22,11 @@
   },
   "homepage": "https://github.com/aagamezl/route-finding#readme",
   "devDependencies": {
+    "commitizen": "^4.3.0",
+    "cz-conventional-changelog": "^3.3.0",
+    "husky": "^8.0.3",
+    "snazzy": "^9.0.0",
+    "standard": "^17.1.0",
     "vite": "^4.4.8"
   }
 }

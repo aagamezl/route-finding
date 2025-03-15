@@ -1,5 +1,3 @@
-import { getMapPositionHandler } from './getMapPositionHandler.js'
-
 /**
  * Renders a grid on the specified canvas with the given visual attributes.
  * @param {HTMLCanvasElement} canvas - The canvas element on which to render the grid.
@@ -11,35 +9,33 @@ import { getMapPositionHandler } from './getMapPositionHandler.js'
  */
 export const showGrid = (canvas, { color, lineWidth, tileSize }) => {
   const gridCanvas = document.createElement('canvas')
-  const ctx = gridCanvas.getContext('2d');
-  const clienRect = canvas.getBoundingClientRect()
+  const ctx = gridCanvas.getContext('2d')
 
   gridCanvas.id = 'grid-canvas'
-  gridCanvas.style.position = 'absolute';
+  gridCanvas.style.position = 'absolute'
   gridCanvas.width = canvas.width
   gridCanvas.height = canvas.height
 
   // gridCanvas.style.top = `${clienRect.top}px`
   gridCanvas.style.left = '0'
-  gridCanvas.addEventListener('click', getMapPositionHandler)
 
-  ctx.strokeStyle = color;
-  ctx.lineWidth = lineWidth;
+  ctx.strokeStyle = color
+  ctx.lineWidth = lineWidth
 
   // Draw vertical grid lines
   for (let x = 0; x <= canvas.width; x += tileSize) {
-    ctx.beginPath();
-    ctx.moveTo(x, 0);
-    ctx.lineTo(x, canvas.height);
-    ctx.stroke();
+    ctx.beginPath()
+    ctx.moveTo(x, 0)
+    ctx.lineTo(x, canvas.height)
+    ctx.stroke()
   }
 
   // Draw horizontal grid lines
   for (let y = 0; y <= canvas.height; y += tileSize) {
-    ctx.beginPath();
-    ctx.moveTo(0, y);
-    ctx.lineTo(canvas.width, y);
-    ctx.stroke();
+    ctx.beginPath()
+    ctx.moveTo(0, y)
+    ctx.lineTo(canvas.width, y)
+    ctx.stroke()
   }
 
   return gridCanvas

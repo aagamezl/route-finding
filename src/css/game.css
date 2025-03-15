@@ -11,4 +11,11 @@
 
 canvas {
   border: 1px solid #000;
+  cursor: pointer;
+}
+
+.btn-settings {
+  --bs-btn-padding-y: .25rem;
+  --bs-btn-padding-x: .5rem;
+  --bs-btn-font-size: .75rem;
 }

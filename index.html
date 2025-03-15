@@ -10,37 +10,20 @@
       integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
       crossorigin="anonymous"></script>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!-- <link rel="stylesheet" href="css/maze-path-table.css">
-    <link rel="stylesheet" href="css/game.css"> -->
   </head>
 
   <body>
-    <div class="container-fluid settings1">
-      <!-- <button class="btn btn-primary"><i class="fa fa-bars"></i></button> -->
-      <!-- Button trigger modal -->
-      <!-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mazeConfiguration">
-        Config
-      </button>
-
-      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#mazePath">
-        Show Path
-      </button>
-
-      <div class="form-check form-switch form-check-inline">
-        <input class="form-check-input" type="checkbox" role="switch" id="gridControl">
-        <label class="form-check-label" for="gridControl">Show Grid</label>
-      </div> -->
-    </div>
-
-    <!-- Config Modal -->
-    <div class="modal fade" id="mazeConfiguration" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-      aria-labelledby="mazeConfigurationLabel" aria-hidden="true">
+    <!-- Settings Modal -->
+    <div class="modal fade" id="mazeSettings" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="mazeSettingsLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h1 class="modal-title fs-5" id="mazeConfigurationLabel">Maze Configuration</h1>
+            <h1 class="modal-title fs-5" id="mazeSettingsLabel">Maze Configuration</h1>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
@@ -60,15 +43,17 @@
                   aria-label="Tile Size">
               </div>
 
-
-              <div class="col-md-4">
-                <label for="characterSpeed" class="form-label">Character Speed</label>
-                <input type="number" id="characterSpeed" value="30" min="10" class="form-control"
-                  aria-label="Character Speed">
-              </div>
               <div class="col-md-4">
                 <label for="openAreas" class="form-label">Open Areas</label>
                 <input type="number" id="openAreas" value="300" min="100" class="form-control" aria-label="Open Areas">
+              </div>
+              <div class="col-md-4">
+                <label for="characterSpeed" class="form-label">Character Speed</label>
+                <input type="number" id="characterSpeed" value="30" min="10" class="form-control" aria-label="Character Speed">
+              </div>
+              <div class="col-md-4">
+                <label for="characterColor" class="form-label">Character Color</label>
+                <input type="color" id="characterColor" value="#FF0000" class="form-control form-control-color" aria-label="Character Color">
               </div>
             </form>
           </div>
@@ -104,7 +89,8 @@
     </div>
     
     <div class="settings">
-      <button class="btn btn-primary" style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;"><i class="fa fa-bars"></i></button>
+      <button class="btn btn-primary btn-settings" data-bs-toggle="modal" data-bs-target="#mazeSettings"><i class="fa fa-bars"></i></button>
+      <button class="btn btn-primary btn-settings" data-bs-toggle="modal" data-bs-target="#mazePath"><i class="fa-solid fa-route"></i></button>
   
       <div class="form-check form-switch form-check-inline">
         <input class="form-check-input" type="checkbox" role="switch" id="showGrid">
@@ -113,12 +99,6 @@
     </div>
 
     <canvas id="gameCanvas" width="800" height="600"></canvas>
-
-    <!-- <script src="src/generateMap.js"></script> -->
-    <!-- <script src="src/maze.js"></script>
-    <script src="src/showMazePath.js"></script>
-    <script src="src/aStart.js"></script>
-    <script src="src/game.js"></script> -->
 
     <script type="module" src="/src/main.js"></script>
   </body>
