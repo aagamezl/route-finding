@@ -1,0 +1,21 @@
+.path-display {
+  font-size: 1em;
+}
+
+.settings {
+  height: 0.8vh;
+  margin-bottom: 1.5rem;
+  margin-left: 0.4vw;
+  margin-top: 0.5vh;
+}
+
+canvas {
+  border: 1px solid #000;
+  cursor: pointer;
+}
+
+.btn-settings {
+  --bs-btn-padding-y: .25rem;
+  --bs-btn-padding-x: .5rem;
+  --bs-btn-font-size: .75rem;
+}

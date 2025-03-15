@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>RPG Game with A* Pathfinding</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+      crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+      integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  </head>
+
+  <body>
+    <!-- Settings Modal -->
+    <div class="modal fade" id="mazeSettings" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="mazeSettingsLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="mazeSettingsLabel">Maze Configuration</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form class="row g-3">
+              <div class="col-md-4">
+                <label for="rowsNumber" class="form-label">Rows</label>
+                <input type="number" id="rowsNumber" value="67" min="20" class="form-control" aria-label="Rows Number">
+              </div>
+              <div class="col-md-4">
+                <label for="columnsNumber" class="form-label">Columns</label>
+                <input type="number" id="columnsNumber" value="128" min="20" class="form-control"
+                  aria-label="Columns Number">
+              </div>
+              <div class="col-md-4">
+                <label for="tileSize" class="form-label">Tile Size</label>
+                <input type="number" id="tileSize" value="24" min="16" max="64" class="form-control"
+                  aria-label="Tile Size">
+              </div>
+
+              <div class="col-md-4">
+                <label for="openAreas" class="form-label">Open Areas</label>
+                <input type="number" id="openAreas" value="300" min="100" class="form-control" aria-label="Open Areas">
+              </div>
+              <div class="col-md-4">
+                <label for="characterSpeed" class="form-label">Character Speed</label>
+                <input type="number" id="characterSpeed" value="30" min="10" class="form-control" aria-label="Character Speed">
+              </div>
+              <div class="col-md-4">
+                <label for="characterColor" class="form-label">Character Color</label>
+                <input type="color" id="characterColor" value="#FF0000" class="form-control form-control-color" aria-label="Character Color">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary">Generate</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Maze Path Modal -->
+    <div class="modal modal-lg fade" id="mazePath" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="mazePathLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="mazePathLabel">Maze Path</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="path-display">
+              <div class="path-stats"></div>
+              <!-- <pre class="path-structure"></pre> -->
+              <table class="maze-path"></table>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="settings">
+      <button class="btn btn-primary btn-settings" data-bs-toggle="modal" data-bs-target="#mazeSettings"><i class="fa fa-bars"></i></button>
+      <button class="btn btn-primary btn-settings" data-bs-toggle="modal" data-bs-target="#mazePath"><i class="fa-solid fa-route"></i></button>
+  
+      <div class="form-check form-switch form-check-inline">
+        <input class="form-check-input" type="checkbox" role="switch" id="showGrid">
+        <label class="form-check-label" for="showGrid">Show Grid</label>
+      </div>
+    </div>
+
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

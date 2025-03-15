@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>RPG Game with A* Pathfinding</title>
+  <style>
+    canvas {
+      border: 1px solid #000;
+    }
+  </style>
+
+  <link rel="stylesheet" href="css/game.css">
+</head>
+
+<body>
+  <div class="settings">
+    <form>
+      <label for="gridControl">Show/Hide Grid</label>
+      <input type="checkbox" name="gridControl" id="gridControl">
+    </form>
+  </div>
+
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+  <div class="path-display">
+    <pre class="path-structure"></pre>
+  </div>
+
+  <script src="src/test.js"></script>
+</body>
+
+</html>
